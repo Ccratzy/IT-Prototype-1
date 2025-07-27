@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StudyHub Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      /* Apple-inspired color palette */
+      --primary: #0071e3;
+      --primary-dark: #0062c4;
+      --primary-light: #e8f2fc;
+      --primary-extra-light: #f5f9ff;
+      --secondary: #30d158;
+      --dark: #1d1d1f;
+      --light: #f5f5f7;
+      --gray: #86868b;
+      --gray-light: #e5e5ea;
+      --danger: #ff453a;
+      --success: #30d158;
+      --warning: #ff9f0a;
+      --border-radius: 12px;
+      --border-radius-lg: 18px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition-fast: all 0.2s ease;
+      --max-width: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      letter-spacing: -0.25px;
+    }
+
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.5rem; }
+
+    p {
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* Layout */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 2rem 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      transform: rotate(30deg);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header-content h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .header-content p {
+      color: rgba(255,255,255,0.9);
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Main content */
+    main {
+      padding: 3rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Tabs */
+    .tabs-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .tabs-scroll {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 1px; /* For the active indicator */
+    }
+
+    .tabs-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tabs {
+      display: inline-flex;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--gray-light);
+      padding: 0 20px;
+    }
+
+    .tab {
+      position: relative;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--gray);
+      transition: var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .tab:hover {
+      color: var(--dark);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .tab i {
+      margin-right: 8px;
+      font-size: 1.1rem;
+    }
+
+    /* Sections */
+    .section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(0,0,0,0.05);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.95rem;
+    }
+
+    .input, textarea, select {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition-fast);
+      background: white;
+      font-family: inherit;
+    }
+
+    .input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 1.75rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-size: 1rem;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 1px solid var(--gray-light);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-extra-light);
+      border-color: var(--primary-light);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #25be4f;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #e63e34;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Flashcard styles */
+    .flashcard-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .flashcard {
+      perspective: 1000px;
+      height: 220px;
+    }
+
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      border-radius: var(--border-radius-lg);
+    }
+
+    .flashcard.flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius-lg);
+      padding: 2rem;
+    }
+
+    .flashcard-front {
+      background: white;
+      color: var(--dark);
+      border: 1px solid var(--gray-light);
+    }
+
+    .flashcard-back {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-text {
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    /* Quiz styles */
+    .quiz-option {
+      padding: 1rem 1.25rem;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--gray-light);
+      cursor: pointer;
+      margin: 0.75rem 0;
+      transition: var(--transition-fast);
+      background: white;
+      text-align: left;
+    }
+
+    .quiz-option:hover {
+      background: var(--primary-extra-light);
+      border-color: var(--primary-light);
+    }
+
+    .quiz-option.selected {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    /* Timer */
+    .timer {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-align: center;
+      margin: 1.5rem 0;
+      padding: 1.25rem;
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-light);
+    }
+
+    /* Empty states */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--gray);
+      background: white;
+      border-radius: var(--border-radius-lg);
+      border: 1px dashed var(--gray-light);
+      margin: 2rem 0;
+    }
+
+    .empty-state i {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--gray-light);
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Progress bars */
+    .progress-bar {
+      height: 8px;
+      background: var(--gray-light);
+      border-radius: 4px;
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+
+    /* Score display */
+    .score-display {
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Results card */
+    .results-card {
+      text-align: center;
+      padding: 2.5rem;
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+
+    .score-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: var(--primary-extra-light);
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      border: 5px solid var(--primary);
+    }
+
+    /* Community items */
+    .community-item {
+      border-left: 4px solid var(--primary);
+      padding-left: 1rem;
+    }
+
+    .creator-info {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 0.75rem;
+    }
+
+    .like-btn {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 1.25rem;
+      transition: var(--transition-fast);
+      padding: 0.5rem;
+    }
+
+    .like-btn.liked {
+      color: var(--danger);
+      transform: scale(1.1);
+    }
+
+    .like-btn:not(.liked) {
+      color: var(--gray-light);
+    }
+
+    .tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: var(--primary-extra-light);
+      color: var(--primary);
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* Session cards */
+    .session-card {
+      border: 1px solid var(--gray-light);
+    }
+
+    .participants {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    /* Grid layouts */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Search bar */
+    .search-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-bar .input {
+      flex: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header-content h1 {
+        font-size: 2.25rem;
+      }
+      
+      .header-content p {
+        font-size: 1.1rem;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+      
+      .flashcard {
+        height: 180px;
+      }
+      
+      .flashcard-text {
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Special animations */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--gray-light);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1><i class="fas fa-graduation-cap"></i> StudyHub Pro</h1>
+      <p>Your premium collaborative learning platform</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="tabs-container">
+        <div class="tabs-scroll">
+          <div class="tabs">
+            <div class="tab active" data-tab="flashcards">
+              <i class="fas fa-layer-group"></i> Flashcards
+            </div>
+            <div class="tab" data-tab="quizzes">
+              <i class="fas fa-question-circle"></i> Quizzes
+            </div>
+            <div class="tab" data-tab="timed">
+              <i class="fas fa-stopwatch"></i> Timed Test
+            </div>
+            <div class="tab" data-tab="community">
+              <i class="fas fa-users"></i> Community
+            </div>
+            <div class="tab" data-tab="sessions">
+              <i class="fas fa-people-arrows"></i> Study Sessions
+            </div>
+            <div class="tab" data-tab="communities">
+              <i class="fas fa-building"></i> Communities
+            </div>
+            <div class="tab" data-tab="summarize">
+              <i class="fas fa-brain"></i> Summarize
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcards Section -->
+      <div class="section active" id="flashcards">
+        <div class="card">
+          <h2>Create New Flashcard</h2>
+          <div class="form-group">
+            <label for="fc-front"><i class="fas fa-question"></i> Question</label>
+            <input class="input" id="fc-front" placeholder="Enter the question text...">
+          </div>
+          <div class="form-group">
+            <label for="fc-back"><i class="fas fa-lightbulb"></i> Answer</label>
+            <input class="input" id="fc-back" placeholder="Enter the answer text...">
+          </div>
+          <div class="form-group">
+            <label for="fc-tags"><i class="fas fa-tags"></i> Tags</label>
+            <input class="input" id="fc-tags" placeholder="Tags (comma separated)">
+          </div>
+          <label style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+            <input type="checkbox" id="fc-public" checked />
+            <span>Share with community</span>
+          </label>
+          <button class="btn btn-primary" onclick="addFlashcard()">
+            <i class="fas fa-plus"></i> Add Flashcard
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">My Flashcards</h2>
+            <button class="btn btn-secondary" onclick="refreshFlashcards()">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+          <div id="flashcard-list">
+            <div class="empty-state" id="flashcard-empty">
+              <i class="fas fa-layer-group"></i>
+              <p>No flashcards yet. Create your first one above!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quizzes Section -->
+      <div class="section" id="quizzes">
+        <div class="card">
+          <h2>Create New Quiz</h2>
+          <div class="form-group">
+            <label for="quiz-title"><i class="fas fa-heading"></i> Quiz Title</label>
+            <input class="input" id="quiz-title" placeholder="Enter a title for your quiz...">
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Add Question</h3>
+          <div class="form-group">
+            <label for="quiz-question"><i class="fas fa-question"></i> Question</label>
+            <textarea class="input" id="quiz-question" placeholder="Enter the question text..."></textarea>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-list-ol"></i> Options</label>
+            <input class="input" id="quiz-opt1" placeholder="Option 1">
+            <input class="input" id="quiz-opt2" placeholder="Option 2">
+            <input class="input" id="quiz-opt3" placeholder="Option 3">
+            <input class="input" id="quiz-opt4" placeholder="Option 4">
+          </div>
+          <div class="form-group">
+            <label for="quiz-answer"><i class="fas fa-check-circle"></i> Correct Answer</label>
+            <select class="input" id="quiz-answer">
+              <option value="">Select correct option</option>
+              <option value="1">Option 1</option>
+              <option value="2">Option 2</option>
+              <option value="3">Option 3</option>
+              <option value="4">Option 4</option>
+            </select>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="addQuizQuestion()">
+              <i class="fas fa-plus"></i> Add Question
+            </button>
+            <button class="btn btn-success" onclick="saveQuiz()">
+              <i class="fas fa-save"></i> Save Quiz
+            </button>
+            <button class="btn btn-secondary" onclick="resetQuizForm()">
+              <i class="fas fa-redo"></i> Reset Form
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">All Quizzes</h2>
+            <button class="btn btn-secondary" onclick="refreshQuizzes()">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+          <div id="quiz-list">
+            <div class="empty-state" id="quiz-empty">
+              <i class="fas fa-question-circle"></i>
+              <p>No quizzes yet. Create your first one above!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timed Test Section -->
+      <div class="section" id="timed">
+        <div class="card">
+          <h2>Timed Test</h2>
+          <div class="form-group">
+            <label for="timed-quiz-select"><i class="fas fa-question-circle"></i> Select Quiz</label>
+            <select class="input" id="timed-quiz-select">
+              <option value="">Select a quiz to take</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="test-time"><i class="fas fa-clock"></i> Time per question (seconds)</label>
+            <input class="input" id="test-time" type="number" value="20" min="5" max="120">
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="startTimedTest()">
+              <i class="fas fa-play"></i> Start Test
+            </button>
+            <button class="btn btn-warning" onclick="resetTest()">
+              <i class="fas fa-redo"></i> Reset Test
+            </button>
+          </div>
+        </div>
+
+        <div id="timed-test-area">
+          <div class="empty-state">
+            <i class="fas fa-stopwatch"></i>
+            <p>Select a quiz and start your timed test!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Section -->
+      <div class="section" id="community">
+        <div class="card">
+          <h2>Community Content</h2>
+          <div class="search-bar">
+            <input class="input" id="search-input" placeholder="Search by tags or content..." />
+            <button class="btn btn-primary" onclick="searchContent()">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="tabs-scroll">
+            <div class="tabs">
+              <div class="tab active" data-subtab="community-flashcards">
+                <i class="fas fa-layer-group"></i> Community Flashcards
+              </div>
+              <div class="tab" data-subtab="community-quizzes">
+                <i class="fas fa-question-circle"></i> Community Quizzes
+              </div>
+            </div>
+          </div>
+
+          <div class="section active" id="community-flashcards">
+            <div class="grid" id="community-flashcards-list"></div>
+          </div>
+          <div class="section" id="community-quizzes">
+            <div class="grid" id="community-quizzes-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Study Sessions Section -->
+      <div class="section" id="sessions">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Study Sessions</h2>
+            <button class="btn btn-primary" onclick="showCreateSession()">
+              <i class="fas fa-plus"></i> Create New Session
+            </button>
+          </div>
+
+          <div id="create-session-form" style="display: none;">
+            <h3>Create Study Session</h3>
+            <div class="form-group">
+              <label for="session-title">Session Title</label>
+              <input class="input" id="session-title" placeholder="Session Title" />
+            </div>
+            <div class="form-group">
+              <label for="session-max-participants">Max Participants</label>
+              <input class="input" id="session-max-participants" placeholder="Max Participants" type="number" min="1" max="20" value="10" />
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-success" onclick="createSession()">
+                <i class="fas fa-check"></i> Create Session
+              </button>
+              <button class="btn btn-secondary" onclick="hideCreateSession()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Active Sessions</h3>
+          <div id="sessions-list">
+            <div class="empty-state">
+              <i class="fas fa-people-arrows"></i>
+              <p>No active study sessions. Create one to get started!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Communities Section -->
+      <div class="section" id="communities">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Study Communities</h2>
+            <button class="btn btn-primary" onclick="showCreateCommunity()">
+              <i class="fas fa-plus"></i> Create New Community
+            </button>
+          </div>
+          
+          <div id="create-community-form" style="display: none;">
+            <h3>Create Study Community</h3>
+            <div class="form-group">
+              <label for="community-name">Community Name</label>
+              <input class="input" id="community-name" placeholder="Enter community name..." />
+            </div>
+            <div class="form-group">
+              <label for="community-description">Description</label>
+              <textarea class="input" id="community-description" placeholder="Describe your community's purpose and focus..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="community-tags">Tags</label>
+              <input class="input" id="community-tags" placeholder="Tags (comma separated) e.g., math, science, history" />
+            </div>
+            <div class="form-group">
+              <label for="community-privacy">Privacy</label>
+              <select class="input" id="community-privacy">
+                <option value="public">Public - Anyone can join</option>
+                <option value="private">Private - Invitation only</option>
+              </select>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-success" onclick="createCommunity()">
+                <i class="fas fa-check"></i> Create Community
+              </button>
+              <button class="btn btn-secondary" onclick="hideCreateCommunity()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="tabs-scroll">
+            <div class="tabs">
+              <div class="tab active" data-commtab="my-communities">
+                <i class="fas fa-users"></i> My Communities
+              </div>
+              <div class="tab" data-commtab="discover-communities">
+                <i class="fas fa-search"></i> Discover Communities
+              </div>
+            </div>
+          </div>
+
+          <div class="section active" id="my-communities">
+            <h3>Communities I'm In</h3>
+            <div id="my-communities-list"></div>
+          </div>
+
+          <div class="section" id="discover-communities">
+            <div class="search-bar">
+              <input class="input" id="community-search" placeholder="Search communities..." />
+              <button class="btn btn-primary" onclick="searchCommunities()">
+                <i class="fas fa-search"></i> Search
+              </button>
+            </div>
+            <h3>Available Communities</h3>
+            <div id="discover-communities-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summarize & Ask Doubt Section -->
+      <div class="section" id="summarize">
+        <div class="card">
+          <h2><i class="fas fa-brain"></i> Summarize & Ask Doubt</h2>
+          <div class="form-group">
+            <label for="summarize-type"><i class="fas fa-upload"></i> What do you want to upload?</label>
+            <select class="input" id="summarize-type">
+              <option value="youtube">YouTube Link</option>
+              <option value="podcast">Podcast Link</option>
+              <option value="file">Text File (txt, pdf, docx)</option>
+            </select>
+          </div>
+          <div class="form-group" id="summarize-link-group">
+            <label for="summarize-link"><i class="fas fa-link"></i> Paste Link</label>
+            <input class="input" id="summarize-link" placeholder="Paste YouTube or podcast link here..." />
+          </div>
+          <div class="form-group" id="summarize-file-group" style="display:none;">
+            <label for="summarize-file"><i class="fas fa-file-upload"></i> Upload File</label>
+            <input class="input" id="summarize-file" type="file" accept=".txt,.pdf,.doc,.docx" />
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="summarizeContent('summary')">
+              <i class="fas fa-magic"></i> Summarize
+            </button>
+            <button class="btn btn-success" onclick="summarizeContent('explanation')">
+              <i class="fas fa-lightbulb"></i> Explain
+            </button>
+          </div>
+        </div>
+        
+        <div id="summary-result" class="card" style="display:none;"></div>
+        
+        <div class="card" id="ask-doubt-section" style="display:block; margin-top:2rem;">
+          <h2><i class="fas fa-question"></i> Ask a Doubt</h2>
+          <div id="context-info" style="margin-bottom:1rem; color:var(--gray); font-size:0.98rem; display:none;"></div>
+          <div class="form-group">
+            <label for="doubt-input"><i class="fas fa-question-circle"></i> Your Question</label>
+            <input class="input" id="doubt-input" placeholder="Type your doubt here..." />
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-success" onclick="askDoubt()">
+              <i class="fas fa-robot"></i> Ask AI
+            </button>
+          </div>
+          <div id="doubt-answer" class="card" style="display:none; margin-top:1.5rem;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Global variables
+    let currentUser = { id: 'default', username: 'User', email: 'user@example.com' };
+    let communityFlashcards = [];
+    let communityQuizzes = [];
+    let studySessions = [];
+    let timedTestTimer = null;
+
+    // Initialize app
+    function initApp() {
+      setupTabs();
+      renderFlashcards();
+      renderQuizzes();
+      loadCommunityData();
+      loadStudySessions();
+      loadCommunities();
+      
+      // Set up event listeners
+      document.getElementById('summarize-type').addEventListener('change', function() {
+        const type = this.value;
+        if (type === 'file') {
+          document.getElementById('summarize-link-group').style.display = 'none';
+          document.getElementById('summarize-file-group').style.display = 'block';
+        } else {
+          document.getElementById('summarize-link-group').style.display = 'block';
+          document.getElementById('summarize-file-group').style.display = 'none';
+        }
+      });
+    }
+
+    // Setup tab functionality
+    function setupTabs() {
+      // Main tabs
+      document.querySelectorAll('.tab[data-tab]').forEach(tab => {
+        tab.onclick = () => {
+          document.querySelectorAll('.tab[data-tab]').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(tab.dataset.tab).classList.add('active');
+          
+          // Special tab initialization
+          if(tab.dataset.tab === 'timed') updateTimedQuizSelect();
+          if(tab.dataset.tab === 'community') loadCommunityData();
+          if(tab.dataset.tab === 'sessions') loadStudySessions();
+          if(tab.dataset.tab === 'communities') loadCommunities();
+        }
+      });
+
+      // Community subtabs
+      document.querySelectorAll('.tab[data-subtab]').forEach(tab => {
+        tab.onclick = () => {
+          document.querySelectorAll('.tab[data-subtab]').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('#community .section').forEach(s => s.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(tab.dataset.subtab).classList.add('active');
+        }
+      });
+      
+      // Communities subtabs
+      document.querySelectorAll('.tab[data-commtab]').forEach(tab => {
+        tab.onclick = () => {
+          document.querySelectorAll('.tab[data-commtab]').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('#communities .section').forEach(s => s.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(tab.dataset.commtab).classList.add('active');
+        }
+      });
+    }
+
+    // Flashcards
+    function getFlashcards() {
+      return JSON.parse(localStorage.getItem(`flashcards_${currentUser.id}`) || '[]');
+    }
+
+    function setFlashcards(fcs) {
+      localStorage.setItem(`flashcards_${currentUser.id}`, JSON.stringify(fcs));
+      renderFlashcards();
+    }
+
+    function refreshFlashcards() {
+      renderFlashcards();
+      // Show visual feedback
+      const btn = document.querySelector('#flashcards .btn-secondary');
+      btn.innerHTML = '<i class="fas fa-check"></i> Refreshed';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+      }, 1500);
+    }
+
+    function addFlashcard() {
+      const front = document.getElementById('fc-front').value.trim();
+      const back = document.getElementById('fc-back').value.trim();
+      const tags = document.getElementById('fc-tags').value.trim().split(',').map(t => t.trim()).filter(t => t);
+      const isPublic = document.getElementById('fc-public').checked;
+      
+      if (!front || !back) {
+        showAlert('Both question and answer are required!', 'danger');
+        return;
+      }
+      
+      const fcs = getFlashcards();
+      const newFlashcard = {
+        id: Date.now().toString(),
+        front,
+        back,
+        tags,
+        isPublic,
+        creator: currentUser.username,
+        creatorId: currentUser.id,
+        likes: [],
+        createdAt: new Date().toISOString()
+      };
+      
+      fcs.push(newFlashcard);
+      setFlashcards(fcs);
+      
+      // Add to community if public
+      if (isPublic) {
+        addToCommunityFlashcards(newFlashcard);
+      }
+      
+      // Clear form
+      document.getElementById('fc-front').value = '';
+      document.getElementById('fc-back').value = '';
+      document.getElementById('fc-tags').value = '';
+      document.getElementById('fc-public').checked = true;
+      
+      // Show success feedback
+      showAlert('Flashcard added successfully!', 'success');
+    }
+
+    function renderFlashcards() {
+      const fcs = getFlashcards();
+      const list = document.getElementById('flashcard-list');
+      
+      if (fcs.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state" id="flashcard-empty">
+            <i class="fas fa-layer-group"></i>
+            <p>No flashcards yet. Create your first one above!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = '<div class="flashcard-container"></div>';
+      const container = list.querySelector('.flashcard-container');
+      
+      fcs.forEach((fc, i) => {
+        const card = document.createElement('div');
+        card.className = 'flashcard';
+        card.innerHTML = `
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <div class="flashcard-text">${fc.front}</div>
+            </div>
+            <div class="flashcard-back">
+              <div class="flashcard-text">${fc.back}</div>
+            </div>
+          </div>
+        `;
+        
+        card.addEventListener('click', () => {
+          card.classList.toggle('flipped');
+        });
+        
+        container.appendChild(card);
+      });
+    }
+
+    // Quizzes
+    let quizQuestions = [];
+    
+    function getQuizzes() {
+      return JSON.parse(localStorage.getItem('quizzes') || '[]');
+    }
+    
+    function setQuizzes(qzs) {
+      localStorage.setItem('quizzes', JSON.stringify(qzs));
+      renderQuizzes();
+    }
+    
+    function refreshQuizzes() {
+      renderQuizzes();
+      // Show visual feedback
+      const btn = document.querySelector('#quizzes .btn-secondary');
+      btn.innerHTML = '<i class="fas fa-check"></i> Refreshed';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+      }, 1500);
+    }
+    
+    function addQuizQuestion() {
+      const q = document.getElementById('quiz-question').value.trim();
+      const o1 = document.getElementById('quiz-opt1').value.trim();
+      const o2 = document.getElementById('quiz-opt2').value.trim();
+      const o3 = document.getElementById('quiz-opt3').value.trim();
+      const o4 = document.getElementById('quiz-opt4').value.trim();
+      const a = parseInt(document.getElementById('quiz-answer').value);
+      
+      if (!q || !o1 || !o2 || !o3 || !o4 || isNaN(a) || a < 1 || a > 4) {
+        showAlert('Please fill all fields and select the correct answer!', 'danger');
+        return;
+      }
+      
+      quizQuestions.push({ 
+        q, 
+        options: [o1, o2, o3, o4], 
+        answer: a-1 
+      });
+      
+      // Clear form
+      document.getElementById('quiz-question').value = '';
+      document.getElementById('quiz-opt1').value = '';
+      document.getElementById('quiz-opt2').value = '';
+      document.getElementById('quiz-opt3').value = '';
+      document.getElementById('quiz-opt4').value = '';
+      document.getElementById('quiz-answer').value = '';
+      
+      // Show success feedback
+      showAlert('Question added to quiz!', 'success');
+    }
+    
+    function resetQuizForm() {
+      document.getElementById('quiz-title').value = '';
+      document.getElementById('quiz-question').value = '';
+      document.getElementById('quiz-opt1').value = '';
+      document.getElementById('quiz-opt2').value = '';
+      document.getElementById('quiz-opt3').value = '';
+      document.getElementById('quiz-opt4').value = '';
+      document.getElementById('quiz-answer').value = '';
+      quizQuestions = [];
+      
+      showAlert('Quiz form has been reset!', 'info');
+    }
+    
+    function saveQuiz() {
+      const title = document.getElementById('quiz-title').value.trim();
+      
+      if (!title) {
+        showAlert('Please enter a quiz title!', 'danger');
+        return;
+      }
+      
+      if (quizQuestions.length === 0) {
+        showAlert('Please add at least one question to the quiz!', 'danger');
+        return;
+      }
+      
+      const qzs = getQuizzes();
+      qzs.push({ 
+        id: Date.now().toString(),
+        title, 
+        questions: [...quizQuestions],
+        creator: currentUser.username,
+        creatorId: currentUser.id,
+        likes: [],
+        isPublic: true,
+        createdAt: new Date().toISOString()
+      });
+      
+      setQuizzes(qzs);
+      quizQuestions = [];
+      document.getElementById('quiz-title').value = '';
+      
+      // Show success feedback
+      showAlert('Quiz saved successfully!', 'success');
+    }
+    
+    function renderQuizzes() {
+      const qzs = getQuizzes();
+      const list = document.getElementById('quiz-list');
+      
+      if (qzs.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state" id="quiz-empty">
+            <i class="fas fa-question-circle"></i>
+            <p>No quizzes yet. Create your first one above!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = '<div class="grid"></div>';
+      const grid = list.querySelector('.grid');
+      
+      qzs.forEach((quiz, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-title">${quiz.title}</div>
+          <p>${quiz.questions.length} questions</p>
+          <div class="card-actions">
+            <button class="btn btn-primary" onclick='takeQuiz(${i})'>
+              <i class="fas fa-play"></i> Take Quiz
+            </button>
+            <button class="btn btn-danger" onclick='deleteQuiz(${i})'>
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+    
+    function deleteQuiz(index) {
+      if (!confirm('Are you sure you want to delete this quiz?')) return;
+      
+      const qzs = getQuizzes();
+      qzs.splice(index, 1);
+      setQuizzes(qzs);
+      
+      showAlert('Quiz deleted successfully!', 'success');
+    }
+    
+    function takeQuiz(idx) {
+      const quiz = getQuizzes()[idx];
+      let score = 0;
+      let currentQuestion = 0;
+      
+      function showQuestion() {
+        if (currentQuestion >= quiz.questions.length) {
+          // Quiz finished
+          const percentage = Math.round((score / quiz.questions.length) * 100);
+          document.getElementById('quiz-list').innerHTML = `
+            <div class="results-card">
+              <div class="score-circle">${score}/${quiz.questions.length}</div>
+              <div class="score-display">
+                Quiz Complete!
+              </div>
+              <div class="progress-bar">
+                <div class="progress" style="width: ${percentage}%"></div>
+              </div>
+              <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0">You scored ${score} out of ${quiz.questions.length} (${percentage}%)</p>
+              <button class="btn btn-primary" onclick="renderQuizzes()" style="margin: 0 auto; display: block; font-size: 1.1rem; padding: 1rem 2rem">
+                <i class="fas fa-arrow-left"></i> Back to Quizzes
+              </button>
+            </div>
+          `;
+          return;
+        }
+        
+        const q = quiz.questions[currentQuestion];
+        let html = `
+          <div class="card">
+            <div class="progress-bar">
+              <div class="progress" style="width: ${(currentQuestion / quiz.questions.length) * 100}%"></div>
+            </div>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;"><strong>Question ${currentQuestion + 1} of ${quiz.questions.length}</strong></p>
+            <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">${q.q}</p>
+        `;
+        
+        q.options.forEach((opt, i) => {
+          html += `<div class="quiz-option" onclick="selectAnswer(${i})">${opt}</div>`;
+        });
+        
+        html += `</div>`;
+        document.getElementById('quiz-list').innerHTML = html;
+        
+        window.selectAnswer = (i) => {
+          if (i === q.answer) {
+            score++;
+          }
+          currentQuestion++;
+          showQuestion();
+        }
+      }
+      
+      showQuestion();
+    }
+    
+    // Initialize quizzes on load
+    renderQuizzes();
+
+    // Timed Test
+    function updateTimedQuizSelect() {
+      const qzs = getQuizzes();
+      const sel = document.getElementById('timed-quiz-select');
+      
+      sel.innerHTML = '<option value="">Select a quiz to take</option>';
+      
+      if (qzs.length === 0) {
+        return;
+      }
+      
+      qzs.forEach((q, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = q.title;
+        sel.appendChild(opt);
+      });
+    }
+    
+    function resetTest() {
+      // Clear any existing timer
+      if (timedTestTimer) {
+        clearInterval(timedTestTimer);
+        timedTestTimer = null;
+      }
+      
+      // Reset the test area
+      document.getElementById('timed-test-area').innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-stopwatch"></i>
+          <p>Select a quiz and start your timed test!</p>
+        </div>
+      `;
+    }
+    
+    function startTimedTest() {
+      // Clear any existing timer
+      if (timedTestTimer) {
+        clearInterval(timedTestTimer);
+        timedTestTimer = null;
+      }
+      
+      const idx = document.getElementById('timed-quiz-select').value;
+      const timePerQuestion = parseInt(document.getElementById('test-time').value) || 20;
+      
+      if (idx === '') {
+        showAlert('Please select a quiz first!', 'danger');
+        return;
+      }
+      
+      const quiz = getQuizzes()[idx];
+      let score = 0;
+      let currentQuestion = 0;
+      let timeLeft;
+      
+      function showQuestion() {
+        // Clear any existing timer
+        if (timedTestTimer) {
+          clearInterval(timedTestTimer);
+          timedTestTimer = null;
+        }
+        
+        if (currentQuestion >= quiz.questions.length) {
+          // Test finished
+          const percentage = Math.round((score / quiz.questions.length) * 100);
+          document.getElementById('timed-test-area').innerHTML = `
+            <div class="results-card">
+              <div class="score-circle">${score}/${quiz.questions.length}</div>
+              <div class="score-display">
+                Test Complete!
+              </div>
+              <div class="progress-bar">
+                <div class="progress" style="width: ${percentage}%"></div>
+              </div>
+              <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0">You scored ${score} out of ${quiz.questions.length} (${percentage}%)</p>
+              <button class="btn btn-primary" onclick="resetTest()" style="margin: 0 auto; display: block; font-size: 1.1rem; padding: 1rem 2rem">
+                <i class="fas fa-redo"></i> Take Another Test
+              </button>
+            </div>
+          `;
+          return;
+        }
+        
+        const q = quiz.questions[currentQuestion];
+        timeLeft = timePerQuestion;
+        
+        document.getElementById('timed-test-area').innerHTML = `
+          <div class="card">
+            <div class="progress-bar">
+              <div class="progress" style="width: ${(currentQuestion / quiz.questions.length) * 100}%"></div>
+            </div>
+            <div class="timer" id="timer">Time: ${timeLeft}s</div>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;"><strong>Question ${currentQuestion + 1} of ${quiz.questions.length}</strong></p>
+            <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">${q.q}</p>
+            ${q.options.map((opt, i) => `<div class="quiz-option" onclick="selectTimedAnswer(${i})">${opt}</div>`).join('')}
+          </div>
+        `;
+        
+        // Update timer every second
+        timedTestTimer = setInterval(() => {
+          timeLeft--;
+          const timerEl = document.getElementById('timer');
+          if (timerEl) {
+            timerEl.textContent = `Time: ${timeLeft}s`;
+          }
+          
+          // Change color when time is running low
+          if (timeLeft <= 5) {
+            timerEl.style.color = 'var(--danger)';
+            timerEl.style.fontWeight = '700';
+            timerEl.classList.add('pulse');
+          } else {
+            timerEl.style.color = 'var(--primary)';
+            timerEl.classList.remove('pulse');
+          }
+          
+          if (timeLeft <= 0) {
+            clearInterval(timedTestTimer);
+            timedTestTimer = null;
+            currentQuestion++;
+            showQuestion();
+          }
+        }, 1000);
+        
+        window.selectTimedAnswer = (i) => {
+          clearInterval(timedTestTimer);
+          timedTestTimer = null;
+          if (i === q.answer) {
+            score++;
+          }
+          currentQuestion++;
+          showQuestion();
+        }
+      }
+      
+      showQuestion();
+    }
+    
+    // Initialize timed test select on load
+    updateTimedQuizSelect();
+
+    // Community functions
+    function loadCommunityData() {
+      loadCommunityFlashcards();
+      loadCommunityQuizzes();
+    }
+
+    function loadCommunityFlashcards() {
+      const allFlashcards = [];
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      
+      users.forEach(user => {
+        const userFlashcards = JSON.parse(localStorage.getItem(`flashcards_${user.id}`) || '[]');
+        const publicFlashcards = userFlashcards.filter(fc => fc.isPublic && fc.creatorId !== currentUser.id);
+        allFlashcards.push(...publicFlashcards);
+      });
+      
+      communityFlashcards = allFlashcards.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      renderCommunityFlashcards();
+    }
+
+    function loadCommunityQuizzes() {
+      const allQuizzes = [];
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      
+      users.forEach(user => {
+        const userQuizzes = JSON.parse(localStorage.getItem(`quizzes_${user.id}`) || '[]');
+        const publicQuizzes = userQuizzes.filter(q => q.isPublic && q.creatorId !== currentUser.id);
+        allQuizzes.push(...publicQuizzes);
+      });
+      
+      communityQuizzes = allQuizzes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      renderCommunityQuizzes();
+    }
+
+    function addToCommunityFlashcards(flashcard) {
+      communityFlashcards.unshift(flashcard);
+      renderCommunityFlashcards();
+    }
+
+    function renderCommunityFlashcards() {
+      const list = document.getElementById('community-flashcards-list');
+      list.innerHTML = '';
+      
+      if (communityFlashcards.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-layer-group"></i>
+            <p>No community flashcards available yet.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      communityFlashcards.forEach(fc => {
+        const card = document.createElement('div');
+        card.className = 'card community-item';
+        card.innerHTML = `
+          <div class="flashcard">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">
+                <div class="flashcard-text">${fc.front}</div>
+              </div>
+              <div class="flashcard-back">
+                <div class="flashcard-text">${fc.back}</div>
+              </div>
+            </div>
+          </div>
+          <div class="creator-info">Created by ${fc.creator}</div>
+          ${fc.tags.length > 0 ? `<div class="tags">${fc.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+          <button class="like-btn ${fc.likes.includes(currentUser.id) ? 'liked' : ''}" onclick="likeFlashcard('${fc.id}')">
+            <i class="fas fa-heart"></i> ${fc.likes.length || ''}
+          </button>
+        `;
+        
+        card.querySelector('.flashcard').addEventListener('click', () => {
+          card.querySelector('.flashcard').classList.toggle('flipped');
+        });
+        
+        list.appendChild(card);
+      });
+    }
+
+    function renderCommunityQuizzes() {
+      const list = document.getElementById('community-quizzes-list');
+      list.innerHTML = '';
+      
+      if (communityQuizzes.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-question-circle"></i>
+            <p>No community quizzes available yet.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      communityQuizzes.forEach(quiz => {
+        const card = document.createElement('div');
+        card.className = 'card community-item';
+        card.innerHTML = `
+          <h3>${quiz.title}</h3>
+          <p>${quiz.questions.length} questions</p>
+          <div class="creator-info">Created by ${quiz.creator}</div>
+          ${quiz.tags.length > 0 ? `<div class="tags">${quiz.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+          <div class="card-actions">
+            <button class="btn btn-primary" onclick="takeCommunityQuiz('${quiz.id}')">
+              <i class="fas fa-play"></i> Take Quiz
+            </button>
+            <button class="like-btn ${quiz.likes.includes(currentUser.id) ? 'liked' : ''}" onclick="likeQuiz('${quiz.id}')">
+              <i class="fas fa-heart"></i> ${quiz.likes.length || ''}
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function likeFlashcard(flashcardId) {
+      const flashcard = communityFlashcards.find(fc => fc.id === flashcardId);
+      if (!flashcard) return;
+      
+      const likeIndex = flashcard.likes.indexOf(currentUser.id);
+      if (likeIndex > -1) {
+        flashcard.likes.splice(likeIndex, 1);
+      } else {
+        flashcard.likes.push(currentUser.id);
+      }
+      
+      renderCommunityFlashcards();
+    }
+
+    function likeQuiz(quizId) {
+      const quiz = communityQuizzes.find(q => q.id === quizId);
+      if (!quiz) return;
+      
+      const likeIndex = quiz.likes.indexOf(currentUser.id);
+      if (likeIndex > -1) {
+        quiz.likes.splice(likeIndex, 1);
+      } else {
+        quiz.likes.push(currentUser.id);
+      }
+      
+      renderCommunityQuizzes();
+    }
+
+    function searchContent() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      
+      const filteredFlashcards = communityFlashcards.filter(fc => 
+        fc.front.toLowerCase().includes(searchTerm) ||
+        fc.back.toLowerCase().includes(searchTerm) ||
+        fc.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+      
+      const filteredQuizzes = communityQuizzes.filter(q =>
+        q.title.toLowerCase().includes(searchTerm) ||
+        q.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+      
+      renderFilteredContent(filteredFlashcards, filteredQuizzes);
+    }
+
+    function renderFilteredContent(flashcards, quizzes) {
+      const fcList = document.getElementById('community-flashcards-list');
+      const qList = document.getElementById('community-quizzes-list');
+      
+      fcList.innerHTML = '';
+      qList.innerHTML = '';
+      
+      if (flashcards.length === 0 && quizzes.length === 0) {
+        fcList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <p>No content found matching your search.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      if (flashcards.length > 0) {
+        flashcards.forEach(fc => {
+          const card = document.createElement('div');
+          card.className = 'card community-item';
+          card.innerHTML = `
+            <div class="flashcard">
+              <div class="flashcard-inner">
+                <div class="flashcard-front">
+                  <div class="flashcard-text">${fc.front}</div>
+                </div>
+                <div class="flashcard-back">
+                  <div class="flashcard-text">${fc.back}</div>
+                </div>
+              </div>
+            </div>
+            <div class="creator-info">Created by ${fc.creator}</div>
+          `;
+          fcList.appendChild(card);
+        });
+      } else {
+        fcList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-layer-group"></i>
+            <p>No flashcards match your search.</p>
+          </div>
+        `;
+      }
+      
+      if (quizzes.length > 0) {
+        quizzes.forEach(quiz => {
+          const card = document.createElement('div');
+          card.className = 'card community-item';
+          card.innerHTML = `
+            <h3>${quiz.title}</h3>
+            <p>${quiz.questions.length} questions</p>
+            <div class="creator-info">Created by ${quiz.creator}</div>
+            <button class="btn btn-primary" onclick="takeCommunityQuiz('${quiz.id}')">Take Quiz</button>
+          `;
+          qList.appendChild(card);
+        });
+      } else {
+        qList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-question-circle"></i>
+            <p>No quizzes match your search.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Study Sessions
+    function loadStudySessions() {
+      studySessions = JSON.parse(localStorage.getItem('studySessions') || '[]');
+      renderStudySessions();
+    }
+
+    function showCreateSession() {
+      document.getElementById('create-session-form').style.display = 'block';
+    }
+
+    function hideCreateSession() {
+      document.getElementById('create-session-form').style.display = 'none';
+    }
+
+    function createSession() {
+      const title = document.getElementById('session-title').value.trim();
+      const maxParticipants = parseInt(document.getElementById('session-max-participants').value);
+      
+      if (!title) {
+        showAlert('Session title is required!', 'danger');
+        return;
+      }
+      
+      if (maxParticipants < 1 || maxParticipants > 20) {
+        showAlert('Max participants must be between 1 and 20!', 'danger');
+        return;
+      }
+      
+      const newSession = {
+        id: Date.now().toString(),
+        title,
+        maxParticipants,
+        creator: currentUser.username,
+        creatorId: currentUser.id,
+        participants: [currentUser.id],
+        isActive: true,
+        createdAt: new Date().toISOString()
+      };
+      
+      studySessions.push(newSession);
+      localStorage.setItem('studySessions', JSON.stringify(studySessions));
+      
+      renderStudySessions();
+      hideCreateSession();
+      document.getElementById('session-title').value = '';
+      document.getElementById('session-max-participants').value = '10';
+      
+      showAlert('Study session created successfully!', 'success');
+    }
+
+    function renderStudySessions() {
+      const list = document.getElementById('sessions-list');
+      list.innerHTML = '';
+      
+      const activeSessions = studySessions.filter(s => s.isActive);
+      
+      if (activeSessions.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-people-arrows"></i>
+            <p>No active study sessions. Create one to get started!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      activeSessions.forEach(session => {
+        const card = document.createElement('div');
+        card.className = 'card session-card';
+        const isParticipant = session.participants.includes(currentUser.id);
+        const isCreator = session.creatorId === currentUser.id;
+        
+        card.innerHTML = `
+          <h3>${session.title}</h3>
+          <p>Created by ${session.creator}</p>
+          <p class="participants">${session.participants.length}/${session.maxParticipants} participants</p>
+          <div class="card-actions">
+            ${!isParticipant && session.participants.length < session.maxParticipants ? 
+              `<button class="btn btn-primary" onclick="joinSession('${session.id}')">
+                <i class="fas fa-user-plus"></i> Join Session
+              </button>` : ''}
+            ${isParticipant && !isCreator ? 
+              `<button class="btn btn-danger" onclick="leaveSession('${session.id}')">
+                <i class="fas fa-user-minus"></i> Leave Session
+              </button>` : ''}
+            ${isCreator ? 
+              `<button class="btn btn-danger" onclick="endSession('${session.id}')">
+                <i class="fas fa-times"></i> End Session
+              </button>` : ''}
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function joinSession(sessionId) {
+      const session = studySessions.find(s => s.id === sessionId);
+      if (!session) return;
+      
+      if (session.participants.length >= session.maxParticipants) {
+        showAlert('Session is full!', 'danger');
+        return;
+      }
+      
+      if (session.participants.includes(currentUser.id)) {
+        showAlert('Already joined this session!', 'info');
+        return;
+      }
+      
+      session.participants.push(currentUser.id);
+      localStorage.setItem('studySessions', JSON.stringify(studySessions));
+      renderStudySessions();
+      
+      showAlert('Joined session successfully!', 'success');
+    }
+
+    function leaveSession(sessionId) {
+      const session = studySessions.find(s => s.id === sessionId);
+      if (!session) return;
+      
+      const index = session.participants.indexOf(currentUser.id);
+      if (index > -1) {
+        session.participants.splice(index, 1);
+        localStorage.setItem('studySessions', JSON.stringify(studySessions));
+        renderStudySessions();
+        
+        showAlert('Left session successfully!', 'success');
+      }
+    }
+
+    function endSession(sessionId) {
+      const session = studySessions.find(s => s.id === sessionId);
+      if (!session) return;
+      
+      session.isActive = false;
+      localStorage.setItem('studySessions', JSON.stringify(studySessions));
+      renderStudySessions();
+      
+      showAlert('Session ended successfully!', 'success');
+    }
+
+    // Communities functions
+    function loadCommunities() {
+      renderMyCommunities();
+      renderDiscoverCommunities();
+    }
+
+    function showCreateCommunity() {
+      document.getElementById('create-community-form').style.display = 'block';
+    }
+
+    function hideCreateCommunity() {
+      document.getElementById('create-community-form').style.display = 'none';
+    }
+
+    function createCommunity() {
+      const name = document.getElementById('community-name').value.trim();
+      const description = document.getElementById('community-description').value.trim();
+      const tags = document.getElementById('community-tags').value.trim().split(',').map(t => t.trim()).filter(t => t);
+      const privacy = document.getElementById('community-privacy').value;
+
+      if (!name) {
+        showAlert('Community name is required!', 'danger');
+        return;
+      }
+
+      const communities = JSON.parse(localStorage.getItem('communities') || '[]');
+      if (communities.find(c => c.name.toLowerCase() === name.toLowerCase())) {
+        showAlert('Community with this name already exists!', 'danger');
+        return;
+      }
+
+      const newCommunity = {
+        id: Date.now().toString(),
+        name,
+        description,
+        tags,
+        privacy,
+        creator: currentUser.username,
+        creatorId: currentUser.id,
+        members: [currentUser.id],
+        createdAt: new Date().toISOString()
+      };
+
+      communities.push(newCommunity);
+      localStorage.setItem('communities', JSON.stringify(communities));
+
+      // Clear the form
+      document.getElementById('community-name').value = '';
+      document.getElementById('community-description').value = '';
+      document.getElementById('community-tags').value = '';
+      document.getElementById('community-privacy').value = 'public';
+
+      renderMyCommunities();
+      renderDiscoverCommunities();
+      hideCreateCommunity();
+      
+      showAlert('Community created successfully!', 'success');
+    }
+
+    function renderMyCommunities() {
+      const list = document.getElementById('my-communities-list');
+      list.innerHTML = '';
+      
+      const communities = JSON.parse(localStorage.getItem('communities') || '[]');
+      const myCommunities = communities.filter(c => c.members.includes(currentUser.id));
+      
+      if (myCommunities.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-building"></i>
+            <p>You haven't joined any communities yet. Discover communities to get started!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      myCommunities.forEach(community => {
+        const card = document.createElement('div');
+        card.className = 'card community-item';
+        card.innerHTML = `
+          <h3>${community.name}</h3>
+          <p>${community.description}</p>
+          <div class="creator-info">Created by ${community.creator} • ${community.members.length} members</div>
+          ${community.tags.length > 0 ? `<div class="tags">${community.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+          <div class="card-actions">
+            <button class="btn btn-primary" onclick="viewCommunityContent('${community.id}')">
+              <i class="fas fa-eye"></i> View Content
+            </button>
+            <button class="btn btn-danger" onclick="leaveCommunity('${community.id}')">
+              <i class="fas fa-sign-out-alt"></i> Leave Community
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function renderDiscoverCommunities(filteredCommunities = null) {
+      const list = document.getElementById('discover-communities-list');
+      list.innerHTML = '';
+      
+      if (filteredCommunities !== null) {
+        // Show filtered results
+        if (filteredCommunities.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-search"></i>
+              <p>No communities found matching your search.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        filteredCommunities.forEach(community => {
+          const card = document.createElement('div');
+          card.className = 'card community-item';
+          card.innerHTML = `
+            <h3>${community.name}</h3>
+            <p>${community.description}</p>
+            <div class="creator-info">Created by ${community.creator} • ${community.members.length} members</div>
+            ${community.tags.length > 0 ? `<div class="tags">${community.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="joinCommunity('${community.id}')">
+                <i class="fas fa-sign-in-alt"></i> Join Community
+              </button>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+      } else {
+        // Show all available communities
+        const communities = JSON.parse(localStorage.getItem('communities') || '[]');
+        const availableCommunities = communities.filter(c => c.members.includes(currentUser.id) === false && c.privacy === 'public');
+        
+        if (availableCommunities.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-search"></i>
+              <p>No communities available to join. Create the first one!</p>
+            </div>
+          `;
+          return;
+        }
+        
+        availableCommunities.forEach(community => {
+          const card = document.createElement('div');
+          card.className = 'card community-item';
+          card.innerHTML = `
+            <h3>${community.name}</h3>
+            <p>${community.description}</p>
+            <div class="creator-info">Created by ${community.creator} • ${community.members.length} members</div>
+            ${community.tags.length > 0 ? `<div class="tags">${community.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="joinCommunity('${community.id}')">
+                <i class="fas fa-sign-in-alt"></i> Join Community
+              </button>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+      }
+    }
+
+    function joinCommunity(communityId) {
+      const communities = JSON.parse(localStorage.getItem('communities') || '[]');
+      const community = communities.find(c => c.id === communityId);
+      if (!community) return;
+
+      if (community.members.includes(currentUser.id)) {
+        showAlert('Already a member of this community!', 'info');
+        return;
+      }
+
+      community.members.push(currentUser.id);
+      localStorage.setItem('communities', JSON.stringify(communities));
+
+      renderMyCommunities();
+      renderDiscoverCommunities();
+      
+      showAlert('Joined community successfully!', 'success');
+    }
+
+    function leaveCommunity(communityId) {
+      const communities = JSON.parse(localStorage.getItem('communities') || '[]');
+      const community = communities.find(c => c.id === communityId);
+      if (!community) return;
+
+      const index = community.members.indexOf(currentUser.id);
+      if (index > -1) {
+        community.members.splice(index, 1);
+        localStorage.setItem('communities', JSON.stringify(communities));
+        renderMyCommunities();
+        renderDiscoverCommunities();
+        
+        showAlert('Left community successfully!', 'success');
+      }
+    }
+
+    function searchCommunities() {
+      const searchTerm = document.getElementById('community-search').value.toLowerCase();
+      const communities = JSON.parse(localStorage.getItem('communities') || '[]');
+      const availableCommunities = communities.filter(c => c.members.includes(currentUser.id) === false && c.privacy === 'public');
+      const filteredCommunities = availableCommunities.filter(c => 
+        c.name.toLowerCase().includes(searchTerm) ||
+        c.description.toLowerCase().includes(searchTerm) ||
+        c.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+      renderDiscoverCommunities(filteredCommunities);
+    }
+
+    function viewCommunityContent(communityId) {
+      const communities = JSON.parse(localStorage.getItem('communities') || '[]');
+      const community = communities.find(c => c.id === communityId);
+      if (!community) return;
+      
+      // For now, show a simple view. In a full implementation, this would show
+      // community-specific flashcards, quizzes, and other content
+      showAlert(`Viewing content for ${community.name}\n\nThis feature would show community-specific study materials shared by members.`, 'info');
+    }
+
+    // Summarize & Ask Doubt
+    function summarizeContent(type = 'summary') {
+      const content = document.getElementById('summary-result').innerHTML; // Get the last summary/explanation
+      const contextInfo = document.getElementById('context-info').innerHTML; // Get the last context info
+
+      let textToProcess = '';
+      let url = '';
+
+      if (type === 'summary') {
+        textToProcess = content;
+        document.getElementById('context-info').innerHTML = `Context: Summary of the last content.`;
+      } else if (type === 'explanation') {
+        textToProcess = content;
+        document.getElementById('context-info').innerHTML = `Context: Explanation of the last content.`;
+      }
+
+      if (!textToProcess) {
+        showAlert('No content to summarize or explain!', 'danger');
+        return;
+      }
+
+      document.getElementById('summary-result').style.display = 'block';
+      document.getElementById('summary-result').innerHTML = `
+        <h3>Summary/Explanation</h3>
+        <p>${textToProcess}</p>
+      `;
+      document.getElementById('ask-doubt-section').style.display = 'block';
+      document.getElementById('context-info').style.display = 'block';
+      
+      showAlert('Content processed successfully!', 'success');
+    }
+
+    function askDoubt() {
+      const doubtText = document.getElementById('doubt-input').value.trim();
+      if (!doubtText) {
+        showAlert('Please enter a doubt to ask!', 'danger');
+        return;
+      }
+
+      const contextInfo = document.getElementById('context-info').innerHTML;
+      const summary = document.getElementById('summary-result').innerHTML;
+
+      let answer = '';
+      if (contextInfo.includes('Summary')) {
+        answer = `Based on the summary, I can help answer your doubt: "${doubtText}".`;
+      } else if (contextInfo.includes('Explanation')) {
+        answer = `Based on the explanation, I can help answer your doubt: "${doubtText}".`;
+      } else {
+        answer = `I can help answer your doubt: "${doubtText}".`;
+      }
+
+      document.getElementById('doubt-answer').style.display = 'block';
+      document.getElementById('doubt-answer').innerHTML = `
+        <h3>AI Answer</h3>
+        <p>${answer}</p>
+      `;
+      
+      showAlert('Doubt answered successfully!', 'success');
+    }
+
+    // Helper function to show alerts
+    function showAlert(message, type = 'info') {
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.innerHTML = `
+        <div class="alert-content">
+          <i class="fas fa-${type === 'danger' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+          <span>${message}</span>
+        </div>
+        <button class="alert-close" onclick="this.parentElement.remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      document.body.appendChild(alert);
+      setTimeout(() => {
+        alert.remove();
+      }, 5000);
+    }
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
